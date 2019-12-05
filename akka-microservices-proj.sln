@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "akka-microservices-proj", "akka-microservices-proj\akka-microservices-proj.csproj", "{BDA562F7-DF97-4748-AB2F-997E533622EA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BDA562F7-DF97-4748-AB2F-997E533622EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDA562F7-DF97-4748-AB2F-997E533622EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDA562F7-DF97-4748-AB2F-997E533622EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDA562F7-DF97-4748-AB2F-997E533622EA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6D5A0E65-9F13-4B8E-98C0-7BC14E15344C}
+	EndGlobalSection
+EndGlobal
