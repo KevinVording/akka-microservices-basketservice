@@ -4,7 +4,11 @@ namespace akka_microservices_proj.Domain
 {
     public class Basket
     {
-        public long Id { get; set; }
-        public List<BasketProduct> Products { get; set; }
+        public Basket()
+        {
+            Products = new List<Product>();
+        }
+        public long CustomerId { get; set; }
+        public List<Product> Products { get; set; }
     }
 }

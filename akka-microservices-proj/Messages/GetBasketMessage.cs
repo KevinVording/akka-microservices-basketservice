@@ -1,7 +1,9 @@
 ﻿namespace akka_microservices_proj.Messages
 {
-    public class GetBasketMessage
+    public class GetBasketMessage : CustomerMessage
     {
-        public int CustomerId { get; set; }
+        public GetBasketMessage(long customerId) : base(customerId)
+        {
+        }
     }
 }

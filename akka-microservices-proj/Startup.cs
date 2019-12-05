@@ -41,6 +41,10 @@ namespace akka_microservices_proj
                 .AddScoped<IGetBasketFromCustomerCommand, GetBasketFromCustomerCommand>()
                 .AddScoped(x => new Lazy<IGetBasketFromCustomerCommand>(
                     x.GetRequiredService<IGetBasketFromCustomerCommand>()));
+            services
+                .AddScoped<IAddProductToBasketCommand, AddProductToBasketCommand>()
+                .AddScoped(x => new Lazy<IAddProductToBasketCommand>(
+                    x.GetRequiredService<IAddProductToBasketCommand>()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
