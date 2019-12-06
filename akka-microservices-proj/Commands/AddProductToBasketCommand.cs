@@ -26,9 +26,12 @@ namespace akka_microservices_proj.Commands
 
         public async Task<IActionResult> ExecuteAsync(AddProductToBasketMessage msg)
         {
+            if (msg.Product.AmountRemoved > 0 && msg.Product.AmountAdded > 0)
+                return new BadRequestObjectResult("Please do not add AND remove product at the same time.");
+
             var product = await _productActor.Ask<Product>(new GetProductMessage
                 {ProductId = msg.Product.BasketProductId});
-            var productResult = await _productActor.Ask<ProductResult>(new CheckProductMessage(msg.CustomerId){ Product = product, BasketProductAmount = msg.Product.AmountInBasket });
+            var productResult = await _productActor.Ask<ProductResult>(new CheckProductMessage(msg.CustomerId){ Product = product, BasketProductAmount = msg.Product.AmountAdded, ProductAdded = true });
 
             if (productResult.GetType() == typeof(ProductFound))
             {

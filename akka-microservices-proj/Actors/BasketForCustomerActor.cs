@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Akka.Actor;
 using akka_microservices_proj.Domain;
@@ -16,6 +15,7 @@ namespace akka_microservices_proj.Actors
         {
             _productActor = productActor;
             ReceiveAsync<AddProductToBasketMessage>(msg => AddProductToBasket(msg).PipeTo(Sender));
+            ReceiveAsync<RemoveProductFromBasketMessage>(msg => RemoveProductFromBasket(msg).PipeTo(Sender));
             Receive<GetBasketMessage>(msg => Sender.Tell(GetBasketForCustomer(msg)));
         }
 
@@ -31,8 +31,33 @@ namespace akka_microservices_proj.Actors
             {
                 var product = await _productActor.Ask<Product>(new GetProductMessage
                     {ProductId = msg.Product.BasketProductId});
-                Basket.Products.AddRange(Enumerable.Repeat(product, msg.Product.AmountInBasket));
+                Basket.Products.AddRange(Enumerable.Repeat(product, msg.Product.AmountAdded));
                 return new BasketProductAdded{CustomerId = msg.CustomerId, Message = "Product successfully added!"};
+            }
+
+            return new BasketProductNotFound();
+        }
+
+        private async Task<BasketResult> RemoveProductFromBasket(RemoveProductFromBasketMessage msg)
+        {
+            if (Basket.CustomerId.Equals(msg.CustomerId))
+            {
+                var product = await _productActor.Ask<Product>(new GetProductMessage
+                    {ProductId = msg.Product.BasketProductId});
+                if (msg.Product.AmountRemoved > 1)
+                {
+                    for (int i = 0; i < msg.Product.AmountRemoved; i++)
+                    {
+                        Basket.Products.Remove(product);
+                    }
+                }
+                else
+                {
+                    Basket.Products.Remove(product);
+                }
+
+                //Basket.Products.Remove(product);
+                return new BasketProductRemoved {CustomerId = msg.CustomerId, Message = "Product successfully removed!"};
             }
 
             return new BasketProductNotFound();

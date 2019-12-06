@@ -20,4 +20,9 @@
     {
 
     }
+
+    public class BasketProductRemoved : BasketResult
+    {
+
+    }
 }

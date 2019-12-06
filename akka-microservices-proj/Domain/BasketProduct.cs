@@ -10,6 +10,7 @@ namespace akka_microservices_proj.Domain
         public long BasketProductId { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
-        public int AmountInBasket { get; set; }
+        public int AmountAdded { get; set; }
+        public int AmountRemoved { get; set; }
     }
 }

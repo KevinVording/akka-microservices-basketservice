@@ -13,45 +13,42 @@ namespace akka_microservices_proj.Controllers
     {
         private readonly Lazy<IGetBasketFromCustomerCommand> _getBasketFromCustomerCommand;
         private readonly Lazy<IAddProductToBasketCommand> _addProductToBasketCommand;
-        public BasketController(Lazy<IGetBasketFromCustomerCommand> getBasketFromCustomerCommand, Lazy<IAddProductToBasketCommand> addProductToBasketCommand)
+        private readonly Lazy<IRemoveProductFromBasketCommand> _removeProductFromBasketCommand;
+        public BasketController(Lazy<IGetBasketFromCustomerCommand> getBasketFromCustomerCommand,
+            Lazy<IAddProductToBasketCommand> addProductToBasketCommand,
+            Lazy<IRemoveProductFromBasketCommand> removeProductFromBasketCommand)
         {
             _getBasketFromCustomerCommand = getBasketFromCustomerCommand;
             _addProductToBasketCommand = addProductToBasketCommand;
+            _removeProductFromBasketCommand = removeProductFromBasketCommand;
         }
 
-        // Get the basket from customer
+        /// <summary>
+        /// Get the basket from customer
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns></returns>
         [HttpGet("{customerId}")]
-        public async Task<IActionResult> Get(int customerId) =>
-            await _getBasketFromCustomerCommand.Value.ExecuteAsync(new GetBasketMessage(customerId));
+        public async Task<IActionResult> Get(int customerId) => await _getBasketFromCustomerCommand.Value.ExecuteAsync(new GetBasketMessage(customerId));
 
-        // Place product in the basket.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] BasketProduct product) =>
-            await _addProductToBasketCommand.Value.ExecuteAsync(new AddProductToBasketMessage(id)
-                {Product = product});
+        /// <summary>
+        /// Place product in the basket.
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <param name="product"></param>
+        /// <returns></returns>
+        [HttpPut("{customerId}")]
+        public async Task<IActionResult> Put(int customerId, [FromBody] BasketProduct product) =>
+            await _addProductToBasketCommand.Value.ExecuteAsync(new AddProductToBasketMessage(customerId) { Product = product });
 
-        // Remove product from the basket.
-        [HttpDelete("{id}")]
-        public void Delete(int id, [FromBody] BasketProduct product)
-        {
-
-        }
+        /// <summary>
+        /// Remove product from the basket.
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <param name="product"></param>
+        /// <returns></returns>
+        [HttpDelete("{customerId}")]
+        public async Task<IActionResult> Delete(int customerId, [FromBody] BasketProduct product) =>
+            await _removeProductFromBasketCommand.Value.ExecuteAsync(new RemoveProductFromBasketMessage(customerId) { Product = product });
     }
-
-    //public interface IGetBasketFromCustomerCommand
-    //{
-    //    Task<IActionResult> ExecuteAsync(int customerId);
-    //}
-
-    //public class GetBasketFromCustomerCommand : IGetBasketFromCustomerCommand
-    //{
-    //    private readonly IActorRef _basketActor;
-
-    //    public GetBasketFromCustomerCommand(IActorRef basketActor) => _basketActor = basketActor;
-
-    //    public Task<IActionResult> ExecuteAsync(int customerId)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
 }

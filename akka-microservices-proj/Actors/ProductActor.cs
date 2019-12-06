@@ -17,7 +17,7 @@ namespace akka_microservices_proj.Actors
 
             Receive<GetProductsMessage>(msg => Sender.Tell(GetProducts(msg)));
             Receive<GetProductMessage>(msg => Sender.Tell(GetProduct(msg)));
-            Receive<CheckProductMessage>(msg => Sender.Tell(AddProductToBasket(msg)));
+            Receive<CheckProductMessage>(msg => Sender.Tell(CheckProduct(msg)));
         }
 
         private Product GetProduct(GetProductMessage msg)
@@ -30,7 +30,7 @@ namespace akka_microservices_proj.Actors
             return Products;
         }
 
-        private ProductResult AddProductToBasket(CheckProductMessage msg)
+        private ProductResult CheckProduct(CheckProductMessage msg)
         {
             if (Products.Exists(x => x.Id.Equals(msg.Product.Id)))
             {
@@ -41,7 +41,11 @@ namespace akka_microservices_proj.Actors
                 if (product.Stock.StockAmount <= msg.BasketProductAmount)
                     return new ProductInsufficientStock();
 
-                Products[index].Stock.StockAmount -= msg.BasketProductAmount;
+                if (msg.ProductAdded)
+                    Products[index].Stock.StockAmount -= msg.BasketProductAmount;
+                if (!msg.ProductAdded)
+                    Products[index].Stock.StockAmount += msg.BasketProductAmount;
+
                 return new ProductFound();
             }
 
