@@ -26,13 +26,13 @@ namespace akka_microservices_proj.Controllers
 
         // Place product in the basket.
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Product product) =>
+        public async Task<IActionResult> Put(int id, [FromBody] BasketProduct product) =>
             await _addProductToBasketCommand.Value.ExecuteAsync(new AddProductToBasketMessage(id)
                 {Product = product});
 
         // Remove product from the basket.
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(int id, [FromBody] BasketProduct product)
         {
 
         }

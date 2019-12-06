@@ -4,7 +4,7 @@ namespace akka_microservices_proj.Messages
 {
     public class AddProductToBasketMessage : CustomerMessage
     {
-        public Product Product { get; set; }
+        public BasketProduct Product { get; set; }
 
         public AddProductToBasketMessage(long customerId) : base(customerId)
         {

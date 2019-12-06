@@ -70,7 +70,7 @@ namespace akka_microservices_proj.Actors.Provider
                 new Product
                 {
                     Id = 5,
-                    Name = "Lamp",
+                    Name = "MousePad",
                     Price = 2499,
                     Stock = new Stock
                     {

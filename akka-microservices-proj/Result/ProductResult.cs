@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace akka_microservices_proj.Result
+﻿namespace akka_microservices_proj.Result
 {
     public abstract class ProductResult
     {
@@ -11,4 +6,6 @@ namespace akka_microservices_proj.Result
 
     public class ProductFound : ProductResult { }
     public class ProductNotFound : ProductResult { }
+    public class ProductOutOfStock : ProductResult { }
+    public class ProductInsufficientStock : ProductResult { }
 }

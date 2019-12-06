@@ -2,6 +2,8 @@
 {
     public abstract class BasketResult
     {
+        public long CustomerId { get; set; }
+        public string Message { get; set; }
     }
 
     public class BasketProductFound : BasketResult

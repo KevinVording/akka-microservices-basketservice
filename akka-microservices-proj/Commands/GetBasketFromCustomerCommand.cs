@@ -24,7 +24,10 @@ namespace akka_microservices_proj.Commands
         public async Task<IActionResult> ExecuteAsync(GetBasketMessage msg)
         {
             var result = await _basketActor.Ask<Basket>(msg);
-            return new OkObjectResult(result);
+            if (result != null)
+                return new OkObjectResult(result);
+
+            return new BadRequestResult();
         }
     }
 }
