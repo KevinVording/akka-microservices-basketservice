@@ -8,4 +8,5 @@
     public class ProductNotFound : ProductResult { }
     public class ProductOutOfStock : ProductResult { }
     public class ProductInsufficientStock : ProductResult { }
+    public class ProductStockUpdated : ProductResult { }
 }

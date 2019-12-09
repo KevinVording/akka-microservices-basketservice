@@ -41,7 +41,13 @@ namespace akka_microservices_proj.Commands
             {
                 var result = await _basketActor.Ask<BasketResult>(msg);
                 if (result.GetType() == typeof(BasketProductAdded))
+                {
+                    var stockResult = await _productActor.Ask<ProductResult>(new UpdateStockMessage(msg.CustomerId) { CustomerId = msg.CustomerId, BasketProductAmount = msg.Product.AmountAdded,  Product = product, ProductAdded = true });
+                    if (stockResult.GetType() == typeof(ProductNotFound))
+                        return new BadRequestObjectResult("Product not found.");
+
                     return new OkObjectResult(result);
+                }
                 if (result.GetType() == typeof(BasketDoesNotExist))
                     return new BadRequestObjectResult(result);
             }

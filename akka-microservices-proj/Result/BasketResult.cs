@@ -30,4 +30,8 @@
     {
 
     }
+    public class  BasketError : BasketResult
+    {
+
+    }
 }

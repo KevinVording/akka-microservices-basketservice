@@ -47,7 +47,11 @@ namespace akka_microservices_proj.Actors
             {
                 var product = await _productActor.Ask<Product>(new GetProductMessage
                     { ProductId = msg.Product.BasketProductId, Name = msg.Product.Name, Price = msg.Product.Price });
-                if (product != null && msg.Product.AmountRemoved > 1)
+
+                if (msg.Product.AmountRemoved >= Basket.Products.Where(x => x.Id.Equals(product.Id)).Count())
+                    msg.Product.AmountRemoved = Basket.Products.Where(x => x.Id.Equals(product.Id)).Count();
+
+                if (product != null && msg.Product.AmountRemoved > 0)
                 {
                     for (int i = 0; i < msg.Product.AmountRemoved; i++)
                     {

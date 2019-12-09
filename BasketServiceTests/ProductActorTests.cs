@@ -61,6 +61,21 @@ namespace BasketServiceTests
         }
 
         [Test]
+        public void UpdateStock_ProductAdded_HappyFlow()
+        {
+            _productActor.Tell(new UpdateStockMessage(_customerId1) { CustomerId = _customerId1, ProductAdded = true, BasketProductAmount = 3, Product = new Product
+            {
+                Id = 1,
+                Name = "Lamp",
+                Price = 2499,
+                Stock = new Stock { StockAmount = 15 }
+            }});
+            var result = ExpectMsg<ProductResult>();
+
+            Assert.IsTrue(result.GetType() == typeof(ProductStockUpdated));
+        }
+
+        [Test]
         public void CheckProduct_ProductNotFound()
         {
             _productActor.Tell(new CheckProductMessage(1)
