@@ -22,7 +22,7 @@ namespace akka_microservices_proj.Actors
 
         private Product GetProduct(GetProductMessage msg)
         {
-            return Products.FirstOrDefault(x => x.Id.Equals(msg.ProductId));
+            return Products.FirstOrDefault(x => x.Id.Equals(msg.ProductId) && x.Name.Equals(msg.Name) && x.Price.Equals(msg.Price));
         }
 
         private List<Product> GetProducts(GetProductsMessage msg)
@@ -38,7 +38,7 @@ namespace akka_microservices_proj.Actors
                 var product = Products[index];
                 if (product.Stock.StockAmount <= 0)
                     return new ProductOutOfStock();
-                if (product.Stock.StockAmount <= msg.BasketProductAmount)
+                if (product.Stock.StockAmount < msg.BasketProductAmount)
                     return new ProductInsufficientStock();
 
                 if (msg.ProductAdded)

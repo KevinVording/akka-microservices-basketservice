@@ -29,7 +29,7 @@ namespace akka_microservices_proj.Commands
                 return new BadRequestObjectResult("Please do not add AND remove product at the same time.");
 
             var product = await _productActor.Ask<Product>(new GetProductMessage
-                { ProductId = msg.Product.BasketProductId });
+                { ProductId = msg.Product.BasketProductId, Name = msg.Product.Name, Price = msg.Product.Price });
             var productResult = await _productActor.Ask<ProductResult>(new CheckProductMessage(msg.CustomerId) { Product = product, BasketProductAmount = msg.Product.AmountRemoved });
 
             if (productResult.GetType() == typeof(ProductFound))

@@ -27,24 +27,27 @@ namespace akka_microservices_proj.Actors
 
         private async Task<BasketResult> AddProductToBasket(AddProductToBasketMessage msg)
         {
-            if (Basket.CustomerId.Equals(msg.CustomerId))
+            if (Basket.CustomerId.Equals(msg.CustomerId) && msg.CustomerId != 0)
             {
                 var product = await _productActor.Ask<Product>(new GetProductMessage
-                    {ProductId = msg.Product.BasketProductId});
-                Basket.Products.AddRange(Enumerable.Repeat(product, msg.Product.AmountAdded));
-                return new BasketProductAdded{CustomerId = msg.CustomerId, Message = "Product successfully added!"};
+                    { ProductId = msg.Product.BasketProductId, Name = msg.Product.Name, Price = msg.Product.Price });
+                if (product != null)
+                {
+                    Basket.Products.AddRange(Enumerable.Repeat(product, msg.Product.AmountAdded));
+                    return new BasketProductAdded { CustomerId = msg.CustomerId, Message = "Product successfully added!" };
+                }
             }
 
-            return new BasketProductNotFound();
+            return new BasketDoesNotExist { CustomerId = msg.CustomerId, Message = $"Basket for Customer ({msg.CustomerId}) not found." };
         }
 
         private async Task<BasketResult> RemoveProductFromBasket(RemoveProductFromBasketMessage msg)
         {
-            if (Basket.CustomerId.Equals(msg.CustomerId))
+            if (Basket.CustomerId.Equals(msg.CustomerId) && msg.CustomerId != 0)
             {
                 var product = await _productActor.Ask<Product>(new GetProductMessage
-                    {ProductId = msg.Product.BasketProductId});
-                if (msg.Product.AmountRemoved > 1)
+                    { ProductId = msg.Product.BasketProductId, Name = msg.Product.Name, Price = msg.Product.Price });
+                if (product != null && msg.Product.AmountRemoved > 1)
                 {
                     for (int i = 0; i < msg.Product.AmountRemoved; i++)
                     {
@@ -56,11 +59,10 @@ namespace akka_microservices_proj.Actors
                     Basket.Products.Remove(product);
                 }
 
-                //Basket.Products.Remove(product);
                 return new BasketProductRemoved {CustomerId = msg.CustomerId, Message = "Product successfully removed!"};
             }
 
-            return new BasketProductNotFound();
+            return new BasketDoesNotExist { CustomerId = msg.CustomerId, Message = $"Basket for {msg.CustomerId} not found." };
         }
     }
 }

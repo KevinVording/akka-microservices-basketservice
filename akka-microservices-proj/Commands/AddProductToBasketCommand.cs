@@ -30,7 +30,11 @@ namespace akka_microservices_proj.Commands
                 return new BadRequestObjectResult("Please do not add AND remove product at the same time.");
 
             var product = await _productActor.Ask<Product>(new GetProductMessage
-                {ProductId = msg.Product.BasketProductId});
+                {ProductId = msg.Product.BasketProductId, Name = msg.Product.Name, Price = msg.Product.Price });
+
+            if (product == null)
+                return new BadRequestObjectResult("Nonexistent Product");
+
             var productResult = await _productActor.Ask<ProductResult>(new CheckProductMessage(msg.CustomerId){ Product = product, BasketProductAmount = msg.Product.AmountAdded, ProductAdded = true });
 
             if (productResult.GetType() == typeof(ProductFound))
@@ -38,6 +42,8 @@ namespace akka_microservices_proj.Commands
                 var result = await _basketActor.Ask<BasketResult>(msg);
                 if (result.GetType() == typeof(BasketProductAdded))
                     return new OkObjectResult(result);
+                if (result.GetType() == typeof(BasketDoesNotExist))
+                    return new BadRequestObjectResult(result);
             }
             if (productResult.GetType() == typeof(ProductNotFound))
             {
@@ -52,7 +58,7 @@ namespace akka_microservices_proj.Commands
                 return new BadRequestObjectResult("Insufficient Stock");
             }
 
-            return new BadRequestResult();
+            return new BadRequestObjectResult("Something has gone wrong");
         }
     }
 }

@@ -6,6 +6,11 @@
         public string Message { get; set; }
     }
 
+    public class BasketDoesNotExist : BasketResult
+    {
+
+    }
+
     public class BasketProductFound : BasketResult
     {
 
